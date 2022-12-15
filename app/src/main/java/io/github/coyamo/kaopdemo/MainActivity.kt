@@ -22,37 +22,42 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        findViewById<Button>(R.id.click).setOnClickListener {
-            val result = click()
-            AuthAspect.token = "user"
-            Log.d("MainActivity", "click1 returns: $result")
+        findViewById<Button>(R.id.user_login).setOnClickListener {
+            val result = login()
+            Toast.makeText(this, result, Toast.LENGTH_SHORT).show()
         }
-        findViewById<Button>(R.id.click2).setOnClickListener {
+        findViewById<Button>(R.id.action).setOnClickListener {
             val result = click2()
             Toast.makeText(this, result, Toast.LENGTH_SHORT).show()
-            Log.d("MainActivity", "click2 returns: $result")
         }
-        findViewById<Button>(R.id.click3).setOnClickListener {
+        findViewById<Button>(R.id.logout).setOnClickListener {
+            AuthAspect.token = null
+        }
+        findViewById<Button>(R.id.admin_login).setOnClickListener {
             AuthAspect.token = "admin"
         }
-        findViewById<Button>(R.id.click4).setOnClickListener {
-            AuthAspect.token = null
+        findViewById<Button>(R.id.action2).setOnClickListener {
+            val result = clickStatic()
+            Toast.makeText(this, result, Toast.LENGTH_SHORT).show()
+        }
+        findViewById<Button>(R.id.action3).setOnClickListener {
+            val result = clickStatic2()
+            Toast.makeText(this, result, Toast.LENGTH_SHORT).show()
         }
     }
 
     //用法1 手动创建代理的方法 在代理的方法通过point名字手动调用被代理的方法
-    fun click():String{
+    private fun login():String{
         return pointcut.joinPoint("click")!!.join() as String
     }
 
     @TimeCost
     @AopJoinPoint("click")
-    fun clickReal():String{
-        Log.d("MainActivity", "clickReal: Hello")
+    private fun loginReal():String{
         try {
             Thread.sleep(1000)
         }catch (_:Exception){}
-        Log.d("MainActivity", "clickReal: World")
+        AuthAspect.token = "user"
         return "done!"
     }
 
@@ -61,12 +66,28 @@ class MainActivity : AppCompatActivity() {
     @TimeCost
     @NeedToken
     @AopJoinPoint
-    fun click2():String = pointcut{
-        Log.d("MainActivity", "click2: Do something...")
+    private fun click2():String = pointcut{
         try {
             Thread.sleep(500)
         }catch (_:Exception){}
-        Log.d("MainActivity", "click2: Do something done")
         return@pointcut "操作成功"
+    }
+
+    companion object{
+
+        private val pointcut = KAop.inject(this)
+
+        @NeedToken
+        @AopJoinPoint
+        private fun clickStatic():String = pointcut{
+            return@pointcut "操作成功"
+        }
+
+        @NeedToken
+        @AopJoinPoint
+        @JvmStatic
+        private fun clickStatic2():String = pointcut{
+            return@pointcut "操作成功"
+        }
     }
 }

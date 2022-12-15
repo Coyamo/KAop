@@ -30,7 +30,7 @@ public class KAop {
         Map<String, List<Class<? extends Aspect>>> pluginMap = new HashMap<>();
 
 
-        Method[] methods = owner.getClass().getMethods();
+        Method[] methods = owner.getClass().getDeclaredMethods();
         for (Method method : methods) {
             AopJoinPoint proceedAnnotation = method.getAnnotation(AopJoinPoint.class);
             if (proceedAnnotation != null) {
@@ -39,6 +39,7 @@ public class KAop {
                     //为了方便kt使用
                     point = method.toString();
                 }
+                method.setAccessible(true);
                 proceedMap.put(point, method);
                 Annotation[] annotations = method.getAnnotations();
 

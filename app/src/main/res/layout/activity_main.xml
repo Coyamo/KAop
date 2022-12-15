@@ -9,27 +9,40 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/click"
+        android:id="@+id/user_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="用户登录"/>
 
     <Button
-        android:id="@+id/click3"
+        android:id="@+id/admin_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="管理员登录"/>
 
-    <Button
-        android:id="@+id/click2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="操作"/>
 
     <Button
-        android:id="@+id/click4"
+        android:id="@+id/logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="退出登录"/>
+
+
+    <Button
+        android:id="@+id/action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="对象方法操作"/>
+    <Button
+        android:id="@+id/action2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kt静态方法操作"/>
+
+    <Button
+        android:id="@+id/action3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Java静态方法操作"/>
 
 </LinearLayout>
