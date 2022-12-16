@@ -2,12 +2,9 @@ package io.github.coyamo.kaopdemo
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import io.github.coyamo.kaop.KAop
-import io.github.coyamo.kaop.annotation.AopJoinPoint
-import io.github.coyamo.kaop.invoke
 import io.github.coyamo.kaopdemo.aspect.auth.AuthAspect
 import io.github.coyamo.kaopdemo.aspect.auth.NeedToken
 import io.github.coyamo.kaopdemo.aspect.timecost.TimeCost
@@ -47,44 +44,33 @@ class MainActivity : AppCompatActivity() {
     }
 
     //用法1 手动创建代理的方法 在代理的方法通过point名字手动调用被代理的方法
-    private fun login():String{
-        return pointcut.joinPoint("click")!!.join() as String
-    }
-
     @TimeCost
-    @AopJoinPoint("click")
-    private fun loginReal():String{
+    private fun login():String = pointcut{
         try {
             Thread.sleep(1000)
         }catch (_:Exception){}
         AuthAspect.token = "user"
-        return "done!"
+        return@pointcut "done!"
     }
 
 
     //用法2 函数具体实现使用`KAop.inject(this)`{ ... } 包装一次
     @TimeCost
     @NeedToken
-    @AopJoinPoint
     private fun click2():String = pointcut{
-        try {
-            Thread.sleep(500)
-        }catch (_:Exception){}
         return@pointcut "操作成功"
     }
 
     companion object{
 
-        private val pointcut = KAop.inject(this)
+        private val pointcut = KAop(this)
 
         @NeedToken
-        @AopJoinPoint
         private fun clickStatic():String = pointcut{
             return@pointcut "操作成功"
         }
 
         @NeedToken
-        @AopJoinPoint
         @JvmStatic
         private fun clickStatic2():String = pointcut{
             return@pointcut "操作成功"
