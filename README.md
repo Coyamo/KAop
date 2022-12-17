@@ -23,9 +23,9 @@ public class TimeCostAspect extends Aspect {
 }
 ```
 2.
-**对于Kotlin调用：**定义一个注解，使用`@AspectAnnotation`注解该注解，并且指定`plugin`使用`TimeCostAspect`。
-其中`int order() default 0;`代表切面的执行顺序，越小越先执行。`order`为一个约定的名称，可以不定义该参数。默认为`Int.MAX_VALUE`。
-**对于Java调用：**必须要标记注解`@Retention(RetentionPolicy.RUNTIME)`，kotlin默认是RUNTIME。
+**对于Kotlin调用：** 定义一个注解，使用`@AspectAnnotation`注解该注解，并且指定`plugin`使用`TimeCostAspect`。
+其中`int order() default 0;`代表切面的执行顺序，越小越先执行。`order`为一个约定的名称，可以不定义该参数。默认为`Int.MAX_VALUE`。  
+**对于Java调用：** 必须要标记注解`@Retention(RetentionPolicy.RUNTIME)`，kotlin默认是RUNTIME。
 ```java
 @AspectAnnotation(plugin = TimeCostAspect.class)
 @Retention(RetentionPolicy.RUNTIME)
@@ -34,7 +34,7 @@ public @interface TimeCost {
 }
 ```
 ## 使用AOP切面
-**Kotlin**
+**Kotlin**  
 在需要切面的类初始化,在需要切面的函数标记定义的注解，函数用`pointcut{...}`包裹一层，其中`pointcut`是初始化返回的对象，这里override了他的invoke操作。
 ```kotlin
 class KtClassCase {
@@ -63,7 +63,7 @@ object KtObjectCase {
     }
 }
 ```
-**Java**
+**Java**  
 在Java中使用略显繁琐，这里只是做了个对Java的兼容，建议使用Kotlin。
 ```kotlin
 public class JavaCase {
