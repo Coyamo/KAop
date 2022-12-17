@@ -8,13 +8,13 @@ object KtObjectCase {
     private val pointcut = KAop(this)
 
     @NeedToken
-    fun testStatic():String =  pointcut{
+    fun testStatic() =  pointcut{
         return@pointcut "操作成功"
     }
 
     @NeedToken
     @JvmStatic
-    fun testJvmStatic():String = pointcut{
+    fun testJvmStatic() = pointcut{
         return@pointcut "操作成功"
     }
 }

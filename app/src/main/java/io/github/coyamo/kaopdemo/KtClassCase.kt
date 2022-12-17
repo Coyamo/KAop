@@ -7,7 +7,7 @@ class KtClassCase {
     private val pointcut = KAop(this)
 
     @NeedToken
-    fun test():String =  pointcut{
+    fun test() =  pointcut{
         return@pointcut "操作成功"
     }
 

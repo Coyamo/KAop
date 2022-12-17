@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
 
         findViewById<Button>(R.id.user_login).setOnClickListener {
-            val result = login()
+            val result = login("666")
             Toast.makeText(this, result, Toast.LENGTH_SHORT).show()
         }
         findViewById<Button>(R.id.admin_login).setOnClickListener {
@@ -56,11 +56,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     @TimeCost
-    private fun login():String = pointcut{
+    private fun login() = pointcut{
         try {
             Thread.sleep(1000)
         }catch (_:Exception){}
         AuthAspect.token = "user"
         return@pointcut "done!"
     }
+
 }
