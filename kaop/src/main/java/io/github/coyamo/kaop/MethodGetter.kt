@@ -6,6 +6,6 @@ package io.github.coyamo.kaop
  * @date 2022/12/17 00:47
  * @version 1.0
  */
-interface MethodGetter<T> {
+fun interface MethodGetter<T> {
     fun proxy(): T
 }

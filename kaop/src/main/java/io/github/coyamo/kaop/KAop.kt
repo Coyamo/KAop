@@ -9,9 +9,14 @@ object KAop {
     const val ORDER_FILED_NAME = "order"
     const val DEFAULT_ORDER = Int.MAX_VALUE
 
+    @JvmStatic
     fun inject(owner: Any): Pointcut {
         return Pointcut(owner)
     }
 
+    /**
+     * 和[inject]一样
+     */
+    @JvmStatic
     operator fun invoke(owner: Any) = Pointcut(owner)
 }

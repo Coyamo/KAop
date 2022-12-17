@@ -37,6 +37,24 @@ class Pointcut(
         }.proxy()
     }
 
+    /**
+     * 和[invoke]作用一样，java代码使用
+     */
+    fun <T> pointcut(methodGetter:MethodGetter<T>, block: () -> T):T{
+        val method = methodGetter.javaClass.enclosingMethod
+        return if (method == null) {
+            Log.w("KAop", "Obtaining enclosing method failed!")
+            block()
+        } else {
+            val joinPoint = joinPoint(method, block)
+            return if (joinPoint == null) {
+                block()
+            } else {
+                joinPoint.join() as T
+            }
+        }
+    }
+
 
     fun joinPoint(method: Method, block: () -> Any?): JoinPoint? {
         val point = method.toString()
