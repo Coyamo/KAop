@@ -5,6 +5,9 @@ A weird runtime AOP framework.
 ## 原理
 用一个接口包装真正的方法的逻辑，再通过创建匿名类获取当前执行的方法`Method`并代理执行前面包装的逻辑。在中间通过自定义的切面控制方法该如何调用。缺点是对每一个使用KAop的方法创建两个类，牺牲空间和性能换取AOP。
 
+## 使用KAop封装框架
+1.[DEMO]权限请求[KXXPermissions](https://github.com/Coyamo/KAop/blob/main/KXXPermissions/README.md),基于[XXPermissions](https://github.com/getActivity/XXPermissions)
+
 ## 编写AOP切面
 1.继承`Aspect`，如`TimeCostAspect`，实现了对方法执行时间的计算。
 ```java
