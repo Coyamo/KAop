@@ -64,31 +64,24 @@ object KtObjectCase {
 }
 ```
 **Java**  
-在Java中使用略显繁琐，这里只是做了个对Java的兼容，建议使用Kotlin。
+在Java中使用略显繁琐，这里只是做了个对Java的兼容，建议使用Kotlin。  
+注意，创建MethodGetter对象时后面的`{}`
+正确：new MethodGetter<...>(..., ...){}.proxy();  
+错误：new MethodGetter<...>(..., ...).proxy();
 ```kotlin
 public class JavaCase {
     private final Pointcut pointcut = KAop.inject(this);
 
     @NeedToken
     public String test(){
-        return new MethodGetter<String>(){
-            @Override
-            public String proxy() {
-                return pointcut.pointcut(this, ()-> "操作成功");
-            }
-        }.proxy();
+        return new MethodGetter<String>(pointcut, ()-> "操作成功"){}.proxy();
     }
 
     private static final Pointcut pointcutStatic = KAop.inject(JavaCase.class);
 
     @NeedToken
     public static String testStatic(){
-        return new MethodGetter<String>(){
-            @Override
-            public String proxy() {
-                return pointcutStatic.pointcut(this, ()-> "操作成功");
-            }
-        }.proxy();
+        return new MethodGetter<String>(pointcutStatic, ()-> "操作成功"){}.proxy();
     }
 }
 ```

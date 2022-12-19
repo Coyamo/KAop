@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
 
         findViewById<Button>(R.id.user_login).setOnClickListener {
-            val result = login("666")
+            val result = login()
             Toast.makeText(this, result, Toast.LENGTH_SHORT).show()
         }
         findViewById<Button>(R.id.admin_login).setOnClickListener {

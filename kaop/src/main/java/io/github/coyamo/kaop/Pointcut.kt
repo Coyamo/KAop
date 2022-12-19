@@ -19,22 +19,7 @@ class Pointcut(
 
     inline operator fun <reified T> invoke(noinline block: () -> T): T {
         //这里必须要新建一个对象才可以获取到enclosingMethod
-        return object : MethodGetter<T> {
-            override fun proxy(): T {
-                val method = javaClass.enclosingMethod
-                return if (method == null) {
-                    Log.w("KAop", "Obtaining enclosing method failed!")
-                    block()
-                } else {
-                    val joinPoint = joinPoint(method, block)
-                    return if (joinPoint == null) {
-                        block()
-                    } else {
-                        joinPoint.join() as T
-                    }
-                }
-            }
-        }.proxy()
+        return object :MethodGetter<T>(this, block){}.proxy()
     }
 
     /**
@@ -56,7 +41,7 @@ class Pointcut(
     }
 
 
-    fun joinPoint(method: Method, block: () -> Any?): JoinPoint? {
+    private fun joinPoint(method: Method, block: () -> Any?): JoinPoint? {
         val point = method.toString()
         var joinPoint = cache[point]
         //默认名字是否有缓存

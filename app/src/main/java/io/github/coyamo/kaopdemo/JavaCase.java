@@ -10,23 +10,13 @@ public class JavaCase {
 
     @NeedToken
     public String test(){
-        return new MethodGetter<String>(){
-            @Override
-            public String proxy() {
-                return pointcut.pointcut(this, ()-> "操作成功");
-            }
-        }.proxy();
+        return new MethodGetter<String>(pointcut, ()-> "操作成功"){}.proxy();
     }
 
     private static final Pointcut pointcutStatic = KAop.inject(JavaCase.class);
 
     @NeedToken
     public static String testStatic(){
-        return new MethodGetter<String>(){
-            @Override
-            public String proxy() {
-                return pointcutStatic.pointcut(this, ()-> "操作成功");
-            }
-        }.proxy();
+        return new MethodGetter<String>(pointcutStatic, ()-> "操作成功"){}.proxy();
     }
 }
