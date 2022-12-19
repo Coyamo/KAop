@@ -6,7 +6,7 @@ package io.github.coyamo.kaop
  * @date 2022/12/17 00:47
  * @version 1.0
  */
-open class MethodGetter<T>(private val pointcut:Pointcut, private val block: () -> T) {
+open class MethodGetter<T>(private val pointcut:Pointcut, private val block: PointScope.() -> T) {
     fun proxy(): T{
         return pointcut.pointcut(this, block)
     }

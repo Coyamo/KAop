@@ -28,4 +28,8 @@ abstract class AbsJoinPoint {
      * 方法的参数
      */
     abstract val params: Array<Any?>
+    /**
+     * 方法域
+     */
+    open var scope: PointScope? = null
 }

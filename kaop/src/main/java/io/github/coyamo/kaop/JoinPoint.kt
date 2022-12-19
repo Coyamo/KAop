@@ -10,12 +10,13 @@ import java.lang.reflect.Method
 class JoinPoint(
     override val owner: Any,
     override val method: Method,
-    private val block: () -> Any?,
+    override var scope: PointScope?,
+    var block: PointScope.() -> Any?,
     private val plugins: List<Class<out Aspect>>
 ) : AbsJoinPoint() {
 
     override lateinit var params: Array<Any?>
-    private val aspectChain = AspectChain()
+    private val aspectChain = AspectChain(this)
     private var isInit = false
 
     fun join(vararg args: Any?): Any? {
@@ -30,11 +31,12 @@ class JoinPoint(
             }
             isInit = true
         }
-        return if (plugins.isEmpty()) {
+        val result = if (plugins.isEmpty()) {
             proceed()
         } else {
-            aspectChain.advice(this)
+            aspectChain.advice()
         }
+        return result
     }
 
     // TODO: 2022/12/15 后续添加更多策略 比如全局一个实例、单个类一个实例或指定某个实例
@@ -47,7 +49,7 @@ class JoinPoint(
     }
 
     override fun proceed(): Any? {
-        return block()
+        return scope?.block()
     }
 
 }

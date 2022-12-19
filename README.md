@@ -74,14 +74,14 @@ public class JavaCase {
 
     @NeedToken
     public String test(){
-        return new MethodGetter<String>(pointcut, ()-> "操作成功"){}.proxy();
+        return new MethodGetter<String>(pointcut, scope-> "操作成功"){}.proxy();
     }
 
     private static final Pointcut pointcutStatic = KAop.inject(JavaCase.class);
 
     @NeedToken
     public static String testStatic(){
-        return new MethodGetter<String>(pointcutStatic, ()-> "操作成功"){}.proxy();
+        return new MethodGetter<String>(pointcutStatic, scope-> "操作成功"){}.proxy();
     }
 }
 ```

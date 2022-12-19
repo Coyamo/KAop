@@ -59,4 +59,11 @@
         android:layout_height="wrap_content"
         android:text="Java Static方法操作"/>
 
+
+    <Button
+        android:id="@+id/action6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="申请摄像头权限"/>
+
 </LinearLayout>

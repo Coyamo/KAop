@@ -17,7 +17,7 @@ class Pointcut(
     private val pluginMap = mutableMapOf<String, List<Class<out Aspect?>>>()
     private val cache: MutableMap<String, AbsJoinPoint> = HashMap()
 
-    inline operator fun <reified T> invoke(noinline block: () -> T): T {
+    inline operator fun <reified T> invoke(noinline block: PointScope.() -> T): T {
         //这里必须要新建一个对象才可以获取到enclosingMethod
         return object :MethodGetter<T>(this, block){}.proxy()
     }
@@ -25,15 +25,16 @@ class Pointcut(
     /**
      * 和[invoke]作用一样，java代码使用
      */
-    fun <T> pointcut(methodGetter:MethodGetter<T>, block: () -> T):T{
+    fun <T> pointcut(methodGetter:MethodGetter<T>, block: PointScope.() -> T):T{
         val method = methodGetter.javaClass.enclosingMethod
+        val scope = PointScope()
         return if (method == null) {
             Log.w("KAop", "Obtaining enclosing method failed!")
-            block()
+            scope.block()
         } else {
-            val joinPoint = joinPoint(method, block)
+            val joinPoint = joinPoint(method, scope, block)
             return if (joinPoint == null) {
-                block()
+                scope.block()
             } else {
                 joinPoint.join() as T
             }
@@ -41,11 +42,13 @@ class Pointcut(
     }
 
 
-    private fun joinPoint(method: Method, block: () -> Any?): JoinPoint? {
+    private fun joinPoint(method: Method, scope: PointScope, block: PointScope.() -> Any?): JoinPoint? {
         val point = method.toString()
         var joinPoint = cache[point]
         //默认名字是否有缓存
         if (joinPoint is JoinPoint && joinPoint.method == method) {
+            joinPoint.scope = scope
+            joinPoint.block = block
             Log.d("KAop", "Load ${method.name} from cache")
             return joinPoint
         }
@@ -90,7 +93,7 @@ class Pointcut(
             plugins.add(tmpPlugin.second)
         }
         pluginMap[point] = plugins
-        joinPoint = JoinPoint(owner, method, block, plugins)
+        joinPoint = JoinPoint(owner, method, scope, block, plugins)
         cache[point] = joinPoint
         return joinPoint
     }

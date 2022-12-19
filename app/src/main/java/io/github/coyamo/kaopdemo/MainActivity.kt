@@ -1,5 +1,6 @@
 package io.github.coyamo.kaopdemo
 
+import android.Manifest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -7,6 +8,9 @@ import android.widget.Toast
 import io.github.coyamo.kaop.KAop
 import io.github.coyamo.kaopdemo.aspect.auth.AuthAspect
 import io.github.coyamo.kaopdemo.aspect.timecost.TimeCost
+import io.github.coyamo.kxxpermissions.KXXPermission
+import io.github.coyamo.kxxpermissions.permissionDenied
+import io.github.coyamo.kxxpermissions.permissionGranted
 
 class MainActivity : AppCompatActivity() {
 
@@ -53,6 +57,10 @@ class MainActivity : AppCompatActivity() {
             val result = JavaCase.testStatic()
             Toast.makeText(this, result, Toast.LENGTH_SHORT).show()
         }
+
+        findViewById<Button>(R.id.action6).setOnClickListener {
+            useCamera()
+        }
     }
 
     @TimeCost
@@ -62,6 +70,18 @@ class MainActivity : AppCompatActivity() {
         }catch (_:Exception){}
         AuthAspect.token = "user"
         return@pointcut "done!"
+    }
+
+    @KXXPermission([Manifest.permission.CAMERA])
+    private fun useCamera() = pointcut{
+        permissionDenied { permissions,nerver->
+            Toast.makeText(this@MainActivity, if(nerver) "永久拒绝授权" else "拒绝授权", Toast.LENGTH_SHORT).show()
+        }
+
+        permissionGranted{permissions,all->
+            Toast.makeText(this@MainActivity, "已经授权", Toast.LENGTH_SHORT).show()
+        }
+        return@pointcut
     }
 
 }
